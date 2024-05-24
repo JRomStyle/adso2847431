@@ -1,17 +1,17 @@
-# adso2847431
-## Análisis Y Desarrollo de Software
-### Centro de Procesos Industriales y Construcción 
+# ADSO2847431
+##Análisis y Desarrollo de Software 
+### centro de procesos industriales y construccion
 
 ---
 
-![Hollow Knight](https://tinyurl.com/yeywdpa7)
+![hollow knight](https://tinyurl.com/2s475ywe)
 
-| # | Topic      | Description       |
-|---|---         |---                |
-|01 | Javascript | Js Vanilla Objects|
+|# | topic                   |  descrption        |
+|---|---                     |---
+|01|javascript               | js vanilla objects |
 
-[Files Drive ADSO](https://tinyurl.com/4657t2vw)
+|[files drive adso](https://tinyurl.com/4657t2vw) |
 
-|URL Netlify/Vercel      |
-|---          |
-| [Open Link](https://adso2847431.netlify.app) |
+|URL netlify/vercel|
+|--- |
+|[open link](https://adso2847431.netlify.app)     |
