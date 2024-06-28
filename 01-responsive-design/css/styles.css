@@ -62,40 +62,6 @@ body {
                 }
             }
         }
-         /* Menu Burger */
-        nav.menu-burger {
-            background-color: var(--color1);
-            position: fixed;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding-block: 1rem;
-            transition: all 0.4s ease-in;
-            top: -200px;
-            gap: 1rem;
-            z-index: 2;
-            width: 100%;
-            a:is(:link, :visited) {
-                color: var(--color4);
-                font-family: var(--font-heading);
-                text-decoration: none;
-                font-size: 24px;
-                display: flex;
-                flex-direction: column;
-                transition: transform 0.2s ease-in;
-                align-items: center;
-                width: 178px;
-               }
-            a:is(:hover) {
-                transform: scale(1.1);
-            }
-            a:is(:hover) img {
-                transform: translateY(3px);
-            }
-        }
-        nav.menu-burger.active {
-            top: 80px;
         /* Owl nav*/
         div.owl-nav {
             display: flex;
