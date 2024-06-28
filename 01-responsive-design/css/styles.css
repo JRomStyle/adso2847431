@@ -86,7 +86,16 @@ body {
                 transition: transform 0.2s ease-in;
                 align-items: center;
                 width: 178px;
+               }
+            a:is(:hover) {
+                transform: scale(1.1);
             }
+            a:is(:hover) img {
+                transform: translateY(3px);
+            }
+        }
+        nav.menu-burger.active {
+            top: 80px;
         /* Owl nav*/
         div.owl-nav {
             display: flex;
