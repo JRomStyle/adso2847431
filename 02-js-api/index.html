@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rick and Morty Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --portal-green: #39ff14;
+            --rick-blue: #00b0c8;
+            --toxic-yellow: #baf418;
+            --portal-purple: #b44ac0;
+            --morty-yellow: #f0e14a;
+        }
+        
+        body {
+            background-color: #121212;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/simple-icons/5.9.0/simpleicons.svg');
+            background-blend-mode: overlay;
+            background-size: 400px;
+            animation: bgScroll 60s linear infinite;
+            overflow-x: hidden;
+        }
+        
+        @keyframes bgScroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 400px 400px; }
+        }
+        
+        nav {
+            padding: 1rem;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-bottom: 3px solid var(--portal-green);
+        }
+        
+        nav a {
+            color: var(--portal-green);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: fit-content;
+        }
+        
+        nav svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--portal-green);
+            margin-right: 10px;
+            transform: rotate(0);
+            transition: transform 0.3s ease;
+        }
+        
+        nav a:hover svg {
+            transform: rotate(-30deg);
+            filter: drop-shadow(0 0 10px var(--portal-green));
+        }
+        
+        main {
+            padding: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 4rem;
+            margin: 0;
+            color: var(--portal-green);
+            text-shadow: 0 0 10px var(--portal-green), 0 0 20px var(--portal-green);
+            animation: glowText 3s ease-in-out infinite;
+        }
+        
+        @keyframes glowText {
+            0%, 100% { text-shadow: 0 0 10px var(--portal-green), 0 0 20px var(--portal-green); }
+            50% { text-shadow: 0 0 20px var(--rick-blue), 0 0 30px var(--rick-blue); }
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            color: var(--rick-blue);
+            margin-top: 0.5rem;
+        }
+        
+        .portal-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 4px solid var(--portal-green);
+            box-shadow: 0 0 30px var(--portal-green);
+            opacity: 0.2;
+            z-index: -1;
+            animation: spin 10s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        section.characters {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0 5rem 0;
+        }
+        
+        div.character {
+            border: 4px solid var(--portal-green);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            height: 300px;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+            transition: all 0.3s ease;
+            transform: perspective(500px) rotateY(0);
+        }
+        
+        div.character:hover {
+            transform: perspective(500px) rotateY(10deg) scale(1.05);
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.6);
+            z-index: 2;
+        }
+        
+        article, img {
+            position: absolute;
+        }
+        
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: filter 0.4s ease;
+        }
+        
+        div.character:hover img {
+            filter: saturate(1.5) brightness(1.2);
+        }
+        
+        article {
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7), transparent);
+            z-index: 1;
+            bottom: -80px;
+            padding: 1rem;
+            width: 100%;
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-sizing: border-box;
+        }
+        
+        h4, h5 {
+            margin: 0.2rem 0;
+        }
+        
+        h4 {
+            color: white;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px black;
+        }
+        
+        .Alive {
+            color: var(--portal-green);
+            text-shadow: 0 0 5px var(--portal-green);
+        }
+        
+        .Dead {
+            color: #ff3d3d;
+            text-shadow: 0 0 5px #ff3d3d;
+        }
+        
+        .unknown {
+            color: var(--morty-yellow);
+            text-shadow: 0 0 5px var(--morty-yellow);
+        }
+        
+        button.btn-show {
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            background-color: var(--rick-blue);
+            color: white;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 10px rgba(0, 176, 200, 0.5);
+        }
+        
+        button.btn-show:hover {
+            transform: scale(1.1);
+            background-color: var(--portal-green);
+            box-shadow: 0 0 15px var(--portal-green);
+        }
+        
+        .character:hover article {
+            bottom: 0;
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .portal {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--portal-green), var(--rick-blue));
+            box-shadow: 0 0 30px var(--portal-green);
+            animation: portalPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes portalPulse {
+            0%, 100% { transform: scale(0.8); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(145deg, #222, #333);
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid var(--portal-green);
+            width: 80%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 30px var(--portal-green);
+            animation: modalEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @keyframes modalEnter {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .modal-close {
+            cursor: pointer;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff3d3d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        
+        .modal-close:hover {
+            background-color: #ff1a1a;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 61, 61, 0.5);
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--rick-blue);
+            padding-bottom: 15px;
+        }
+        
+        #modal-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            margin-right: 20px;
+            border: 3px solid var(--portal-purple);
+            box-shadow: 0 0 15px var(--portal-purple);
+        }
+        
+        .modal-info {
+            flex: 1;
+        }
+        
+        .modal-info h3 {
+            color: var(--portal-green);
+            font-size: 2rem;
+            margin: 0 0 10px 0;
+            font-family: 'Creepster', cursive;
+        }
+        
+        .modal-detail p {
+            margin: 10px 0;
+            font-size: 1.1rem;
+            border-left: 3px solid var(--rick-blue);
+            padding-left: 10px;
+        }
+        
+        .modal-detail p strong {
+            color: var(--toxic-yellow);
+        }
+        
+        .episode-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .episode-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid var(--portal-purple);
+            transition: all 0.2s ease;
+        }
+        
+        .episode-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .episode-name {
+            font-weight: bold;
+            color: var(--morty-yellow);
+        }
+        
+        .episode-air {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3rem;
+            }
+            
+            .modal-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            #modal-image {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .episode-list {
+                grid-template-columns: 1fr;
+            }
+            
+            section.characters {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            
+            div.character {
+                height: 240px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="../index.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
+            </svg>
+            Portal Atrás
+        </a>
+    </nav>
+    <main>
+        <header>
+            <div class="portal-spinner"></div>
+            <h1>Rick and Morty Portal</h1>
+            <h2>Universo C-137 y más allá</h2>
+        </header>
+        
+        <div class="loading">
+            <div class="portal"></div>
+        </div>
+        
+        <section class="characters"></section>
+    </main>
+    
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img id="modal-image" src="" alt="Character Image">
+                <div class="modal-info">
+                    <h3 id="modal-title"></h3>
+                    <p id="modal-status"></p>
+                    <p id="modal-species"></p>
+                    <p id="modal-gender"></p>
+                </div>
+            </div>
+            <div class="modal-detail">
+                <p><strong>Origen:</strong> <span id="modal-origin"></span></p>
+                <p><strong>Ubicación Actual:</strong> <span id="modal-location"></span></p>
+                <p><strong>Primera Aparición:</strong> <span id="modal-created"></span></p>
+                
+                <h4>Episodios:</h4>
+                <div class="episode-list" id="modal-episodes">
+                    <!-- Episodes will be loaded here -->
+                </div>
+            </div>
+            <button class="modal-close">Cerrar Portal</button>
+        </div>
+    </div>
+    
+    <script>
+        const charactersSection = document.querySelector('.characters');
+        const loadingDiv = document.querySelector('.loading');
+        const modal = document.getElementById('infoModal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalStatus = document.getElementById('modal-status');
+        const modalSpecies = document.getElementById('modal-species');
+        const modalGender = document.getElementById('modal-gender');
+        const modalOrigin = document.getElementById('modal-origin');
+        const modalLocation = document.getElementById('modal-location');
+        const modalCreated = document.getElementById('modal-created');
+        const modalImage = document.getElementById('modal-image');
+        const modalEpisodes = document.getElementById('modal-episodes');
+        const modalClose = document.querySelector('.modal-close');
+        
+        // Fetch characters from the API
+        const fetchCharacters = async () => {
+            try {
+                const response = await fetch('https://rickandmortyapi.com/api/character/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20');
+                const data = await response.json();
+                
+                loadingDiv.style.display = 'none';
+                
+                data.forEach(character => {
+                    charactersSection.innerHTML += `
+                        <div class="character"> 
+                            <article> 
+                                <h4>${character.name.length > 16 ? character.name.substring(0, 16) + '...' : character.name}</h4> 
+                                <h5 class="${character.status}">${character.status}</h5> 
+                                <button class="btn-show" 
+                                    data-id="${character.id}" 
+                                    data-name="${character.name}" 
+                                    data-status="${character.status}" 
+                                    data-species="${character.species}" 
+                                    data-gender="${character.gender}" 
+                                    data-origin="${character.origin.name}"
+                                    data-location="${character.location.name}"
+                                    data-created="${new Date(character.created).toLocaleDateString()}"
+                                    data-image="${character.image}"
+                                    data-episodes="${character.episode.join(',')}"
+                                >+ Info</button> 
+                            </article> 
+                            <img src="${character.image}" alt="${character.name}"> 
+                        </div>`;
+                });
+                
+                addClickEvents();
+            } catch (error) {
+                console.error('Error fetching characters:', error);
+                charactersSection.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+                        <h3 style="color: red;">¡Error en el Multiverso!</h3>
+                        <p>No pudimos obtener los personajes. Intenta más tarde.</p>
+                    </div>`;
+                loadingDiv.style.display = 'none';
+            }
+        }
+        
+        // Add click events to the buttons
+        function addClickEvents() {
+            const btnsShow = document.querySelectorAll('.btn-show');
+            btnsShow.forEach(button => {
+                button.addEventListener('click', async function() {
+                    // Set the main character info
+                    modalTitle.textContent = this.getAttribute('data-name');
+                    modalStatus.textContent = `Estado: ${this.getAttribute('data-status')}`;
+                    modalStatus.className = this.getAttribute('data-status');
+                    modalSpecies.textContent = `Especie: ${this.getAttribute('data-species')}`;
+                    modalGender.textContent = `Género: ${this.getAttribute('data-gender')}`;
+                    modalOrigin.textContent = this.getAttribute('data-origin');
+                    modalLocation.textContent = this.getAttribute('data-location');
+                    modalCreated.textContent = this.getAttribute('data-created');
+                    modalImage.src = this.getAttribute('data-image');
+                    
+                    // Clear previous episodes
+                    modalEpisodes.innerHTML = '<div class="loading"><div class="portal"></div></div>';
+                    
+                    // Show the modal
+                    modal.style.display = 'flex';
+                    
+                    // Fetch episodes information
+                    try {
+                        const episodeUrls = this.getAttribute('data-episodes').split(',');
+                        
+                        // Only get the first 5 episodes to avoid too many requests
+                        const episodesToShow = episodeUrls.slice(0, 5);
+                        
+                        const episodePromises = episodesToShow.map(url => 
+                            fetch(url).then(res => res.json())
+                        );
+                        
+                        const episodes = await Promise.all(episodePromises);
+                        
+                        // Build episodes HTML
+                        let episodesHTML = '';
+                        episodes.forEach(episode => {
+                            episodesHTML += `
+                                <div class="episode-item">
+                                    <div class="episode-name">${episode.name}</div>
+                                    <div class="episode-code">${episode.episode}</div>
+                                    <div class="episode-air">Aired: ${episode.air_date}</div>
+                                </div>
+                            `;
+                        });
+                        
+                        // Add "and more" message if there are more episodes
+                        if (episodeUrls.length > 5) {
+                            episodesHTML += `
+                                <div class="episode-item" style="background-color: rgba(57, 255, 20, 0.2);">
+                                    <div class="episode-name">Y ${episodeUrls.length - 5} episodios más...</div>
+                                </div>
+                            `;
+                        }
+                        
+                        modalEpisodes.innerHTML = episodesHTML;
+                    } catch (error) {
+                        console.error('Error fetching episodes:', error);
+                        modalEpisodes.innerHTML = '<p>Error al cargar episodios. ¡Problemas en el Multiverso!</p>';
+                    }
+                });
+            });
+        }
+        
+        // Close modal when clicking the close button
+        modalClose.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Initialize
+        fetchCharacters();
+    </script>
+</body>
+</html>
