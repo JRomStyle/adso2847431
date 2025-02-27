@@ -285,12 +285,18 @@
             box-shadow: 0 0 15px rgba(255, 61, 61, 0.5);
         }
         
+        /* Modified header structure */
         .modal-header {
-            display: flex;
-            align-items: right;
+            display: block;
             margin-bottom: 20px;
             border-bottom: 2px solid var(--rick-blue);
             padding-bottom: 15px;
+        }
+        
+        .modal-title-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
         }
         
         #modal-image {
@@ -303,15 +309,30 @@
             flex-shrink: 0;
         }
         
-        .modal-info {
-            flex: 1;
+        #modal-title {
+            color: var(--portal-green);
+            font-size: 2.5rem;
+            margin: 0;
+            font-family: 'Creepster', cursive;
+            align-self: center;
         }
         
-        .modal-info h3 {
-            color: var(--portal-green);
-            font-size: 2rem;
-            margin: 0 0 10px 0;
-            font-family: 'Creepster', cursive;
+        .modal-info {
+            width: 100%;
+        }
+        
+        .modal-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        
+        .modal-stats p {
+            margin: 5px 0;
+            padding: 8px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            text-align: center;
         }
         
         .modal-detail p {
@@ -355,27 +376,27 @@
             color: #aaa;
         }
         
-        /* Responsive adjustments - FIXED to maintain side-by-side layout */
+        /* Responsive adjustments */
         @media (max-width: 768px) {
             h1 {
                 font-size: 3rem;
             }
             
-            .modal-header {
-                flex-direction: row; /* Keep as row instead of column */
-                text-align: left; /* Keep left-aligned text */
-                align-items: flex-start; /* Align items at the top */
+            .modal-title-row {
+                align-items: flex-start;
             }
             
             #modal-image {
-                margin-right: 15px; /* Keep right margin */
-                margin-bottom: 0; /* Remove bottom margin */
-                width: 120px; /* Make image slightly smaller on mobile */
+                width: 120px;
                 height: 120px;
             }
             
-            .modal-info h3 {
-                font-size: 1.5rem; /* Smaller font for mobile */
+            #modal-title {
+                font-size: 1.8rem;
+            }
+            
+            .modal-stats {
+                grid-template-columns: 1fr 1fr;
             }
             
             .episode-list {
@@ -389,22 +410,26 @@
             div.character {
                 height: 240px;
             }
-            
-            .modal-content {
-                width: 90%; /* Slightly wider on mobile */
-                padding: 20px 15px; /* Smaller padding */
-            }
         }
         
-        /* Extra small screens adjustment */
+        /* Extra small screens */
         @media (max-width: 480px) {
             #modal-image {
                 width: 100px;
                 height: 100px;
             }
             
-            .modal-info h3 {
-                font-size: 1.3rem;
+            #modal-title {
+                font-size: 1.5rem;
+            }
+            
+            .modal-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                padding: 15px;
+                width: 90%;
             }
         }
     </style>
@@ -436,9 +461,13 @@
     <div class="modal" id="infoModal">
         <div class="modal-content">
             <div class="modal-header">
-                <img id="modal-image" src="" alt="Character Image">
-                <div class="modal-info">
+                <!-- Changed structure: Image and name are now in their own row -->
+                <div class="modal-title-row">
+                    <img id="modal-image" src="" alt="Character Image">
                     <h3 id="modal-title"></h3>
+                </div>
+                <!-- Character stats in a grid below -->
+                <div class="modal-stats">
                     <p id="modal-status"></p>
                     <p id="modal-species"></p>
                     <p id="modal-gender"></p>
