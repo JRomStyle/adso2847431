@@ -300,6 +300,7 @@
             margin-right: 20px;
             border: 3px solid var(--portal-purple);
             box-shadow: 0 0 15px var(--portal-purple);
+            flex-shrink: 0;
         }
         
         .modal-info {
@@ -354,20 +355,27 @@
             color: #aaa;
         }
         
-        /* Responsive adjustments */
+        /* Responsive adjustments - FIXED to maintain side-by-side layout */
         @media (max-width: 768px) {
             h1 {
                 font-size: 3rem;
             }
             
             .modal-header {
-                flex-direction: column;
-                text-align: center;
+                flex-direction: row; /* Keep as row instead of column */
+                text-align: left; /* Keep left-aligned text */
+                align-items: flex-start; /* Align items at the top */
             }
             
             #modal-image {
-                margin-right: 0;
-                margin-bottom: 15px;
+                margin-right: 15px; /* Keep right margin */
+                margin-bottom: 0; /* Remove bottom margin */
+                width: 120px; /* Make image slightly smaller on mobile */
+                height: 120px;
+            }
+            
+            .modal-info h3 {
+                font-size: 1.5rem; /* Smaller font for mobile */
             }
             
             .episode-list {
@@ -380,6 +388,23 @@
             
             div.character {
                 height: 240px;
+            }
+            
+            .modal-content {
+                width: 90%; /* Slightly wider on mobile */
+                padding: 20px 15px; /* Smaller padding */
+            }
+        }
+        
+        /* Extra small screens adjustment */
+        @media (max-width: 480px) {
+            #modal-image {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .modal-info h3 {
+                font-size: 1.3rem;
             }
         }
     </style>
